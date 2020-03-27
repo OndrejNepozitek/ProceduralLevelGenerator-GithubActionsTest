@@ -12,11 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-      # Checkout
+      # Checkout Unity project structure
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          lfs: true
+          repository: OndrejNepozitek/ProceduralLevelGenerator-UnityProjectStructure
+
+      # Checkout this repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: Assets
     
       # Test
       - name: Run tests
