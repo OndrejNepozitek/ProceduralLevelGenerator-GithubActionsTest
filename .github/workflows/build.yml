@@ -64,10 +64,25 @@ jobs:
           path: ProceduralLevelGenerator.unitypackage
           name: ProceduralLevelGenerator.unitypackage
 
+      # Prepare release package name
+      - name: Prepare release package name
+        if: startsWith(github.ref, 'refs/tags/v')
+      - run: |
+          ref="${GITHUB_REF}"
+          ref="${ref/refs\/tags\//v}"
+          echo $ref
+          ref="${ref/.//_}"
+          echo $ref
+          ref="${ref/-//_}"
+          echo $ref
+          echo "::set-env name=ref::$ref"
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
       # Release
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
           files: ProceduralLevelGenerator.unitypackage
         env:

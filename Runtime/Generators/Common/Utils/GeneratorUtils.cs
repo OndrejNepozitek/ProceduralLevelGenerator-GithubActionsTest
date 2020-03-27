@@ -6,7 +6,6 @@ using MapGeneration.Interfaces.Core.MapLayouts;
 using ProceduralLevelGenerator.Unity.Generators.Common.LevelGraph;
 using ProceduralLevelGenerator.Unity.Generators.Common.Rooms;
 using ProceduralLevelGenerator.Unity.Generators.Common.RoomTemplates.Doors;
-using ProceduralLevelGenerator.Unity.Generators.Common.RoomTemplates.Transformations;
 using ProceduralLevelGenerator.Unity.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -18,72 +17,7 @@ namespace ProceduralLevelGenerator.Unity.Generators.Common.Utils
     {
         public static GeneratedLevel TransformLayout(IMapLayout<Room> layout, LevelDescription levelDescription, GameObject rootGameObject)
         {
-            // var layoutCenter = GetLayoutCenter(layout);
-            var prefabToRoomTemplateMapping = levelDescription.GetPrefabToRoomTemplateMapping();
-            var corridorToConnectionMapping = levelDescription.GetCorridorToConnectionMapping();
-
-            var roomTransformations = new RoomTransformations();
-
-            // Prepare an object to hold instantiated room templates
-            var roomTemplateInstancesRoot = new GameObject("Room template instances");
-            roomTemplateInstancesRoot.transform.parent = rootGameObject.transform;
-
-            // Initialize rooms
-            var layoutData = new Dictionary<Room, RoomInstance>();
-            var layoutRooms = layout.Rooms.ToDictionary(x => x.Node, x => x);
-            foreach (var layoutRoom in layoutRooms.Values)
-            {
-                var roomTemplatePrefab = prefabToRoomTemplateMapping.GetByValue(layoutRoom.RoomTemplate);
-
-                // Instantiate room template
-                var roomTemplateInstance = Object.Instantiate(roomTemplatePrefab);
-                roomTemplateInstance.transform.SetParent(roomTemplateInstancesRoot.transform);
-
-                // Transform room template if needed
-                var transformation = layoutRoom.Transformation;
-                roomTransformations.Transform(roomTemplateInstance, transformation);
-
-                // Compute correct room position
-                var position = layoutRoom.Position.ToUnityIntVector3();
-                roomTemplateInstance.transform.position = position;
-
-                // Compute outline polygon
-                var polygon = new Polygon2D(layoutRoom.Shape + layoutRoom.Position);
-
-                var connection = layoutRoom.IsCorridor ? corridorToConnectionMapping[layoutRoom.Node] : null;
-                var roomInstance = new RoomInstance(layoutRoom.Node, layoutRoom.IsCorridor, connection, roomTemplatePrefab, roomTemplateInstance, position, polygon);
-
-                // Add room info to the GameObject
-                var roomInfo = roomTemplateInstance.GetComponent<RoomInfo>();
-
-                if (roomInfo != null)
-                {
-                    PostProcessUtils.Destroy(roomInfo);
-                }
-
-                roomInfo = roomTemplateInstance.AddComponent<RoomInfo>();
-                roomInfo.RoomInstance = roomInstance;
-
-                layoutData.Add(layoutRoom.Node, roomInstance);
-            }
-
-            foreach (var roomInstance in layoutData.Values)
-            {
-                roomInstance.SetDoors(TransformDoorInfo(layoutRooms[roomInstance.Room].Doors, layoutData));
-            }
-
-            // Add level info
-            var levelInfo = rootGameObject.GetComponent<LevelInfo>();
-
-            if (levelInfo != null)
-            {
-                PostProcessUtils.Destroy(levelInfo);
-            }
-
-            levelInfo = rootGameObject.AddComponent<LevelInfo>();
-            levelInfo.RoomInstances = layoutData.Values.ToList();
-
-            return new GeneratedLevel(layoutData, layout, rootGameObject);
+            return null;
         }
 
         private static List<DoorInstance> TransformDoorInfo(IEnumerable<IDoorInfo<Room>> doorInfos, Dictionary<Room, RoomInstance> roomInstances)
