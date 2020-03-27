@@ -1,14 +1,15 @@
-name: Test
+name: Create package
 
 on:
   watch:
     types: [started]
 
+on:
+  pull_request: {}
+  push: { branches: [master] }
+
 jobs:
   build:
-    # Job name is Greeting
-    name: Test
-    # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
