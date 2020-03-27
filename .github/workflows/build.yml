@@ -22,7 +22,7 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v2
         with:
-          path: Assets
+          path: Assets/ProceduralLevelGenerator
     
 
 
