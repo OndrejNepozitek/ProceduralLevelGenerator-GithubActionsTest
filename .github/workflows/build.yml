@@ -24,25 +24,7 @@ jobs:
         with:
           path: Assets
     
-      # Test
-      - name: Run tests
-        uses: webbertakken/unity-test-runner@v1.3
-        with:
-          unityVersion: ${{ env.UNITY_VERSION }}
 
-      # Build
-      - name: Build project
-        uses: webbertakken/unity-builder@v0.10
-        with:
-          unityVersion: ${{ env.UNITY_VERSION }}
-          targetPlatform: StandaloneWindows64
-
-      # Upload build
-      - name: Upload project
-        uses: actions/upload-artifact@v1
-        with:
-          name: Build
-          path: build
 
       # Prepare unitypackage file list
       - name: Prepare unitypackage file list
