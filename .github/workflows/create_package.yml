@@ -1,10 +1,6 @@
 name: Create package
 
 on:
-  watch:
-    types: [started]
-
-on:
   pull_request: {}
   push: { branches: [master] }
 
