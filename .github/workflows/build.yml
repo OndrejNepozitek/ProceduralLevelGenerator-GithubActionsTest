@@ -34,7 +34,8 @@ jobs:
           targetPlatform: StandaloneWindows64
 
       # Upload build
-      - uses: actions/upload-artifact@v1
+      - name: Upload project
+        uses: actions/upload-artifact@v1
         with:
           name: Build
           path: build
@@ -46,14 +47,24 @@ jobs:
           find ./Assets/ProceduralLevelGenerator/ -name \*.meta >> unitypackageFiles
 
       # Package files
-      - uses: pCYSl5EDgo/create-unitypackage@master
+      - name: Package files
+        uses: pCYSl5EDgo/create-unitypackage@master
         with:
           package-path: 'ProceduralLevelGenerator.unitypackage'
-          include-files: metaList
+          include-files: unitypackageFiles
       
       # Upload unitypackage
-      - uses: actions/upload-artifact@v2-preview
+      - name: Upload unitypackage
+        uses: actions/upload-artifact@v2-preview
         with:
           path: ProceduralLevelGenerator.unitypackage
           name: ProceduralLevelGenerator.unitypackage
 
+      # Release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ProceduralLevelGenerator.unitypackage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
