@@ -29,7 +29,7 @@ jobs:
       # Prepare unitypackage file list
       - name: Prepare unitypackage file list
         run: |
-          echo "Assets/ProceduralLevelGenerator.meta" > unitypackageFiles
+
           find ./Assets/ProceduralLevelGenerator/ -name \*.meta >> unitypackageFiles
 
       # Package files
